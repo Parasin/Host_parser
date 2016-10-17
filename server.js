@@ -5,22 +5,27 @@ var ip_stream = fs.createWriteStream('ip.txt');
 var host_stream = fs.createWriteStream('hosts.txt');
 var line = readline.createInterface(rstream, ip_stream);
 
-
 function main () {
+
     line.on('line', function (line) {
-        var ip = line.substr(0, 20);
-        ip = ip.trim();
-        var end_index = line.search(/all/);
+        var ssg_obj= {};
+        ssg_obj.ip = line.substr(0, 20).trim();
+        ssg_obj.end_index = line.search(/ all/);
+
         line = line.replace(/ all/, '');
         line = line.replace(/[\(\)&]/g, '');
-        var hostname = line.substr(20, end_index);
+
+        ssg_obj.host_name = line.substr(20, ssg_obj.end_index).trim();
+
         try {
-            ip_stream.write(ip.trim() + '\r\n');
-            host_stream.write(hostname + '\r\n');
+            ip_stream.write(ssg_obj.ip + '\r\n');
+            host_stream.write(ssg_obj.host_name + '\r\n');
         } catch (err) {
-            console.log(err);
+            console.log('Error parsing: \n' + err);
             return 1;
         }
     });
+    console.log('Parsed nodes successfully.');
 }
+
 main();
