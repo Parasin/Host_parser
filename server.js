@@ -13,7 +13,7 @@ function main () {
         ssg_obj.end_index = line.search(/ all/);
 
         line = line.replace(/ all/, '');
-        line = line.replace(/[\(\)&]/g, '');
+        line = line.replace(/[\(\)&?,]/g, '');
 
         ssg_obj.host_name = line.substr(20, ssg_obj.end_index).trim();
 
